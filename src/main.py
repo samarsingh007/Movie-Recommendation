@@ -2,6 +2,7 @@ import streamlit as st
 import os
 import subprocess
 
+base_directory = './src/'
 # Function to display a Jupyter notebook
 def display_notebook(notebook_path):
     if os.path.exists(notebook_path):
@@ -29,7 +30,8 @@ def main():
     st.title("Machine Learning Models Display")
 
     st.sidebar.title("Select a File to Display")
-    options = ["Decision_Tree.ipynb", "kmeans.py", "KNN.ipynb", "Logistic_Regression.ipynb", "nb.py", "RF.ipynb"]
+    options = [os.path.join(base_directory, filename) for filename in 
+               ["Decision_Tree.ipynb", "kmeans.py", "KNN.ipynb", "Logistic_Regression.ipynb", "nb.py", "RF.ipynb"]]
     selected_file = st.sidebar.selectbox("Choose a file", options)
 
     if selected_file.endswith('.ipynb'):
