@@ -7,6 +7,12 @@ from sklearn.metrics import classification_report, confusion_matrix
 import seaborn as sns
 import matplotlib.pyplot as plt
 
+
+def plot_pairplot(df):
+    st.subheader("Pairplot of Key Features")
+    sns_plot = sns.pairplot(df[['VOTES', 'RATING', 'Gross']], diag_kind='kde')
+    st.pyplot(sns_plot)
+
 def naive_bayes():
     st.title("Naive Bayes Model for Movie Gross Prediction")
 
@@ -43,14 +49,8 @@ def naive_bayes():
     st.text("Classification Report")
     st.text(classification_report(y_test, y_pred))
 
-    # Confusion Matrix Visualization
-    conf_matrix = confusion_matrix(y_test, y_pred)
-    fig, ax = plt.subplots(figsize=(6,6))
-    sns.heatmap(conf_matrix, annot=True, fmt='d', cmap='Blues', ax=ax)
-    ax.set_ylabel('Actual')
-    ax.set_xlabel('Predicted')
-    ax.set_title('Confusion Matrix')
-    st.pyplot(fig)
+    # Visualizations
+    plot_pairplot(df)
 
 def main():
     naive_bayes()
