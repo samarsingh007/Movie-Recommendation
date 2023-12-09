@@ -22,7 +22,7 @@ def main():
     elif selected_model == 'Logistic Regression':
         logistic_regression()
     elif selected_model == 'Naive Bayes':
-        naive_bayes_model()
+        naive_bayes()
     elif selected_model == 'Random Forest':
         random_forest()
     else:
