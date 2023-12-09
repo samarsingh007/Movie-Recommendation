@@ -1,27 +1,30 @@
 import streamlit as st
 import os
-import subprocess
+import nbformat
+from nbconvert.preprocessors import ExecutePreprocessor
+from nbconvert import HTMLExporter
 
-base_directory = './src/'
-# Function to display a Jupyter notebook
+# Base directory for files
+base_directory = './src/'  # Update this path
+
+# Function to display and execute a Jupyter notebook
 def display_notebook(notebook_path):
     if os.path.exists(notebook_path):
-        subprocess.run(['jupyter', 'nbconvert', '--to', 'html', notebook_path])
-        html_file = notebook_path.replace('.ipynb', '.html')
-        if os.path.exists(html_file):
-            with open(html_file, 'r') as f:
-                st.markdown(f.read(), unsafe_allow_html=True)
-        else:
-            st.error(f"Failed to convert {notebook_path} to HTML.")
+        with open(notebook_path) as f:
+            nb = nbformat.read(f, as_version=4)
+            ep = ExecutePreprocessor(timeout=600)
+            ep.preprocess(nb)
+            exporter = HTMLExporter()
+            body, _ = exporter.from_notebook_node(nb)
+            st.markdown(body, unsafe_allow_html=True)
     else:
         st.error(f"File {notebook_path} not found.")
 
-# Function to display a Python script
+# Function to display and execute a Python script
 def display_script(script_path):
     if os.path.exists(script_path):
-        with open(script_path, 'r') as f:
-            code = f.read()
-            st.code(code, language='python')
+        with st.echo():
+            exec(open(script_path).read(), globals())
     else:
         st.error(f"File {script_path} not found.")
 
